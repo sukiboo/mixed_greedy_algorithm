@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 from greedy_algorithms import *
 
 np.set_printoptions(precision=4)
@@ -15,6 +16,7 @@ class SetupExperiments:
     def __init__(self, params_exp):
         self.__dict__.update(params_exp)
         self.module = __import__('__main__')
+        os.makedirs('./images/', exist_ok=True)
         np.random.seed(self.seed)
 
     def generate_dictionary(self):
@@ -63,6 +65,7 @@ class SetupExperiments:
         ax.set_ylabel('approximation error')
         ax.legend(loc='upper right')
         plt.tight_layout()
+        plt.savefig('./images/errors.png', dpi=300, format='png')
         plt.show()
 
     def plot_coef(self):
@@ -77,8 +80,9 @@ class SetupExperiments:
         ax.set_yscale('log')
         ax.set_xlabel('algorithm iterations')
         ax.set_ylabel('cumulative coefficient changes')
-        ax.legend(loc='upper left')
+        ax.legend(loc='lower right')
         plt.tight_layout()
+        plt.savefig('./images/coeffs.png', dpi=300, format='png')
         plt.show()
 
 
