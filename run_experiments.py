@@ -88,9 +88,9 @@ class SetupExperiments:
 
 if __name__ == '__main__':
     '''setup and run experiments'''
-    params_exp = {'dim': 1000, 'num_d': 5000, 'type_d': 'gauss', 'f_card': 200, 'f_noise': .01,
-                  'max_iter': 500, 'num_tests': 1, 'seed': 0, 'mu': .1,
-                  'algos': ['PGA', 'OGA', 'MGA_g_cos', 'MGA_g_prod', 'MGA_prod', 'MGA_mu']}
+    params_exp = {'dim': 1000, 'num_d': 5000, 'type_d': 'gauss', 'f_card': 250, 'f_noise': .01,
+                  'max_iter': 500, 'num_tests': 1, 'seed': 0, 'mu': .5,
+                  'algos': ['PGA', 'OGA', 'MGA_g_prod', 'MGA_prod']}
     exp = SetupExperiments(params_exp)
     exp.run()
     exp.plot_err()
