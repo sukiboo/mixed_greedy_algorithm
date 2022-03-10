@@ -25,13 +25,19 @@ class SetupExperiments:
             self.D = np.random.randn(self.num_d, self.dim)
         elif self.type_d == 'uniform':
             self.D = 2 * np.random.rand(self.num_d, self.dim) - 1
+        elif self.type_d == 'cluster':
+            self.D = np.random.randn(self.dim) + 2*np.random.randn(self.num_d, self.dim)
         self.D /= np.linalg.norm(self.D, axis=1, keepdims=True)
 
     def generate_element(self):
         '''generate target element'''
-        f_ind = np.random.randint(self.num_d, size=self.f_card)
-        f_coef = np.random.randn(self.f_card)
-        self.f = np.matmul(f_coef, self.D[f_ind]) + self.f_noise * np.random.rand(self.dim)
+        if self.type_d == 'cluster':
+            self.f = np.random.randn(self.dim)
+            self.f = self.f - np.dot(self.f, self.D[0]) * self.D[0]
+        else:
+            f_ind = np.random.randint(self.num_d, size=self.f_card)
+            f_coef = np.random.randn(self.f_card)
+            self.f = np.matmul(f_coef, self.D[f_ind]) + self.f_noise * np.random.rand(self.dim)
         self.f /= np.linalg.norm(self.f)
 
     def run(self):
@@ -63,7 +69,7 @@ class SetupExperiments:
         ax.set_yscale('log')
         ax.set_xlabel('algorithm iterations')
         ax.set_ylabel('approximation error')
-        ax.legend(loc='upper right')
+        ax.legend(loc='lower left')
         plt.tight_layout()
         plt.savefig('./images/errors.png', dpi=300, format='png')
         plt.show()
@@ -88,7 +94,7 @@ class SetupExperiments:
 
 if __name__ == '__main__':
     '''setup and run experiments'''
-    params_exp = {'dim': 1000, 'num_d': 5000, 'type_d': 'gauss', 'f_card': 250, 'f_noise': .01,
+    params_exp = {'dim': 1000, 'num_d': 5000, 'type_d': 'cluster', 'f_card': 250, 'f_noise': .01,
                   'max_iter': 500, 'num_tests': 1, 'seed': 0, 'mu': .5,
                   'algos': ['PGA', 'OGA', 'MGA_g_prod', 'MGA_prod']}
     exp = SetupExperiments(params_exp)
